@@ -33,13 +33,11 @@ def Grid():
             new_balance = float('{:.4f}'.format(float(_status['crypto_available'] * spot)))
             print(new_balance)
             difference = float('{:.4f}'.format(((new_balance - init_investment) * 100) / float(init_investment))) #Compares old balance vs. new balance
-            #print(difference) #This commented out code compares the new price vs. old price
-            #difference =  float('{:.4f}'.format(((spot - init_price) * 100) / init_price))
 
             old_difference = difference # Use old to compare to new
 
             if new_balance > init_investment:     
-                print("Crypto is up by %",difference) #When conditions are met, sell crypto to keep balance in wallet(Holding $48 worth of algo all times) #profit will be total_sell_amountUSD - USD balance
+                print("Crypto is up by %",difference) #When conditions are met, sell all crypto in wallet or buy all crypto that I can
                 if difference > 1:
                     flipper = True
                 else:
@@ -50,33 +48,22 @@ def Grid():
                     sp = s.json()
                     spot = float('{:.4f}'.format(float(sp['data']['amount'])))
                     new_balance = float('{:.4f}'.format(float(_status['crypto_available'] * spot)))
-                    #print(new_balance)
                     diff = float('{:.4f}'.format(((new_balance - init_investment) * 100) / float(init_investment)))
-                    #diff =  float('{:.4f}'.format(((spot - init_price) * 100) / init_price))
                     order_size = float('{:.1f}'.format((new_balance - init_investment)/spot))
 
                     percentage_gap = float('{:.4f}'.format(diff - old_difference))
                     print("Gap of %",percentage_gap,"between",old_difference,"and",diff)
-                    
-                    range_upper = int(init_investment + .5)
-                    range_lower = int(init_investment - .5)
-                    trade_range = range(range_lower, range_upper) #Anyhwere within .50$ of the init_investment, do not trade
-                    if percentage_gap <= -.2: #Adjust this as needed 
-                        print("Crypto has dropped .2% while above the",old_difference,"mark.")
-                        print("Going to sell at market price for %",diff,"profit(with .6% fee currently)")
-                        
+
+                    if percentage_gap <= -.223: #Adjust this as needed 
+                        print("Crypto has dropped .223% while above the",old_difference,"mark.")
                         profit_gap = new_balance - init_investment
                         print("Profit Gap:",profit_gap)
-                        if profit_gap >= 1.01:
-                            if new_balance not in trade_range:
-                                print("Going to sell at market price for %",diff,"profit(with .6% fee currently)")
-                                print("Going to buy",order_size,"ALGO!")
-                                SellBot(order_size)
-                                flipper = False
-                                Rebase()
-                            break
-                        else:
-                            print("Not over the 1$ minimum for Coinbase!")
+                        print("Going to sell at market price for %",diff,"profit(with .6% fee currently)")
+                        print("Going to buy",order_size,"ALGO!")
+                        SellBot(order_size)
+                        flipper = False
+                        Rebase()
+                            
                         break
                     if percentage_gap >= .075:
                         print("Crypto has rose above the",old_difference,"mark by .075%!")
@@ -101,22 +88,15 @@ def Grid():
                     
                     percentage_gap = float('{:.4f}'.format(diff - old_difference))
                     print("Gap of %",percentage_gap,"between",old_difference,"and",diff)
-                    if spot < _status['lower_limit']:
-                        print("No longer buying! Price has reached your lower limit!")
-                        Grid()
                     if percentage_gap >= .2:
                         print("Crypto has rose .2% while below the",old_difference,"mark.")
                         profit_gap = init_investment - new_balance
                         print("Profit Gap:",profit_gap)
-                        if profit_gap >= 1.01:
-                            print("Going to buy at market price for %",diff,"to bring balance back to init_investment.")
-                            print("Going to buy",order_size,"ALGO!")
-                            BuyBot(order_size)
-                            flipper = False
-                            Rebase()
-                            break
-                        else:
-                            print("Not over the 1$ minimum for Coinbase!")
+                        print("Going to buy at market price for %",diff,"to bring balance back to init_investment.")
+                        print("Going to buy",order_size,"ALGO!")
+                        BuyBot(order_size)
+                        flipper = False
+                        Rebase()
                         break
                     if percentage_gap <= -.15:
                         print("Crypto has dropped below the",old_difference,"mark by .15%!")
@@ -151,9 +131,6 @@ def Rebase():
     if _status['side'] == 'sell':
         _status['init_price'] = spot
         #_status['init_investment'] = 0.0
-        #_status['lower_limit'] = 0.0
-        #_status['max_bank'] = 0.0
-        #_status['init_bank] = 0.0
         #_status['crypto_available'] = 0.0
         _status['buy_order_id'] = ""
         _status['sell_order_id'] = ""
@@ -161,31 +138,15 @@ def Rebase():
         _status['buy_price'] = 0.0
         #_status['sell_price'] = 0.0
         _status['order_size'] = 0.0
-        _status['order_size_usd_buy'] = 0.0
-        #_status['order_size_usd_sell'] = 0.0
-        _status['time_started'] = ""
-        _status['time_completed'] = ""
-        #_status['margin'] = 0.0
-        #_status['profit'] = 0.0
     elif _status['side'] == 'buy':
         _status['init_price'] = spot
         #_status['init_investment'] = 0.0
-        #_status['lower_limit'] = 0.0
-        #_status['max_bank'] = 0.0
-        #_status['init_bank] = 0.0
-        #_status['crypto_available'] = 0.0
         _status['buy_order_id'] = ""
         _status['sell_order_id'] = ""
         _status['side'] = ""
         #_status['buy_price'] = 0.0
         _status['sell_price'] = 0.0
         _status['order_size'] = 0.0
-        #_status['order_size_usd_buy'] = 0.0
-        _status['order_size_usd_sell'] = 0.0
-        _status['time_started'] = ""
-        _status['time_completed'] = ""
-        #_status['margin'] = 0.0
-        #_status['profit'] = 0.0
 
     status = open("status.json", "w+")
     status.write(json.dumps(_status))

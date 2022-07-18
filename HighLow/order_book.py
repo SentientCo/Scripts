@@ -34,7 +34,7 @@ def BuyMenu():
         r = requests.post(API_URL + 'orders', json=order, auth=auth)
         p = r.json()
         print(p)
-        filename = "./cblog/" + p['id'] + ".json"
+        filename = "./logs/cblog/" + p['id'] + ".json"
         new_file = open(filename, "w")
         new_file.write(json.dumps(p))
         new_file.close()
@@ -70,7 +70,7 @@ def SellMenu():
         r = requests.post(API_URL + 'orders', json=order, auth=auth)
         p = r.json()
         print(p) #Store this transaction data
-        filename = "./cblog/" + p['id'] + ".json"
+        filename = "./logs/cblog/" + p['id'] + ".json"
         new_file = open(filename, "w")
         new_file.write(json.dumps(p))
         new_file.close
@@ -80,7 +80,7 @@ def SellMenu():
         status.write(json.dumps(_status))
         status.close()
 
-        Log_Sell(p)
+        Log_Sell(p) 
         #print("inside order_book.sell")
         return
 

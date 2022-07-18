@@ -36,9 +36,7 @@ def BuyBot(order_size):
         _status['crypto_available'] = order_size + _status['crypto_available']
         _status['buy_price'] = spot
         _status['order_size'] = order_size
-        _status['order_size_usd_buy'] = order_size_usd_buy
         _status['side'] = "buy"
-        _status['time_started'] = now_time
         
 
         status = open("status.json", "w+")
@@ -77,10 +75,8 @@ def SellBot(order_size):
 
         _status['crypto_available'] = _status['crypto_available'] - order_size
         _status['order_size'] = order_size
-        _status['order_size_usd_sell'] = order_size_usd_sell
         _status['sell_price'] = sell_price
         _status['side'] = "sell"
-        _status['time_completed'] = now_time
 
         status = open("status.json", "w+")
         status.write(json.dumps(_status))

@@ -53,30 +53,20 @@ def Start():
         print("USD on Hand       :",available)
         print("Crypto on Hand    :",crypto_available)
         print("Crypto Bal in USD :",USD_in_crypto)
-        print("Cash on Hand      :",bank)
         print("Total USD Balance :",total_investment) 
-        print("Grid Usage        :",investment_used) # polish - change into input()
-        print("Lower Limit       :",lower_limit)  # polish - change into input()
 
         if _status['init_price'] == 0:
             print("First run! Writing init_price to file!")
             _status['init_price'] = spot
 
-        if _status['lower_limit'] == 0:
-            print("Setting the lower limit! Will not trade below $",lower_limit,"!")
-            _status['lower_limit'] = lower_limit
-
         if _status['init_investment'] == 0:
             print("Setting dollar value coins will be held at!")
-            if USD_in_crypto != 0:
-                _status['init_investment'] = float('{:.2f}'.format(float(USD_in_crypto) * .75))
             #Use this to do first buy in. Buy crypto equal to 75% of USD account balance. Also set _status['bank'] value initially here. _status['bank'] = 25% of init balance
             if _status['crypto_available'] == 0:
                 print(available)
-                USD_prep_for_first_buy = float('{:.2f}'.format(available * .85))
+                USD_prep_for_first_buy = float('{:.2f}'.format(available * .99))
                 print("Buying",USD_prep_for_first_buy,"worth of crypto to start trading with!")
                 _status['init_investment'] = USD_prep_for_first_buy
-                USD_in_crypto = USD_prep_for_first_buy #Setting this so bank can setup
                 init_investment = _status['init_investment']
                 order_size = float('{:.1f}'.format(init_investment / spot))
                 status = open("status.json", "w+")
@@ -84,14 +74,7 @@ def Start():
                 status.close()
                 _status['crypto_available'] = order_size
                 print("Setting how much crypto is available to trade! This bot trades ALGO only currently!")
-                #BuyBot(order_size)
-                
-        if _status['init_bank'] == 0:
-            r = requests.get(API_URL + 'accounts/' + USD, auth=auth) #Grabs USD accounts
-            p = r.json()
-            print("Setting how much USD to use if price drops!")
-            _status['max_bank'] = float('{:.2f}'.format(float(p['available'])))
-            _status['init_bank'] = float('{:.2f}'.format(float(p['available'])))
+                BuyBot(order_size)
         
 
         status = open("status.json", "w+")
