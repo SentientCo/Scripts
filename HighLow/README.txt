@@ -30,3 +30,10 @@ YOU WILL BE AT A LOSS DUE TO TRADING FEES. MISTAKES HAPPEN.
 
 Upon a trade being executed, the logs from the trade will be available in it's own file in
 the './cblogs/' folder and in the './logs/' folder.
+
+TODO:
+Add all coins available on Coinbase Pro
+Change the initial buy in to Grid(). Shouldn't buy if the market is already up.
+Change any GET requests to the WebSocket Feed that Coinbase Pro has avaiable. Will help with any throttling issues. 
+ - Try threading to accomplish this. 
+ - Should be able to change any check for the spot price to his and possibly account checks.
