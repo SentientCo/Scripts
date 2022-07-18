@@ -64,7 +64,7 @@ def Start():
             #Use this to do first buy in. Buy crypto equal to 75% of USD account balance. Also set _status['bank'] value initially here. _status['bank'] = 25% of init balance
             if _status['crypto_available'] == 0:
                 print(available)
-                USD_prep_for_first_buy = float('{:.2f}'.format(available * .99))
+                USD_prep_for_first_buy = float('{:.2f}'.format(bank * .98))
                 print("Buying",USD_prep_for_first_buy,"worth of crypto to start trading with!")
                 _status['init_investment'] = USD_prep_for_first_buy
                 init_investment = _status['init_investment']
