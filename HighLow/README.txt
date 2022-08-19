@@ -55,3 +55,4 @@ Changed how account data is grabbed to retrieve crypto and fiat balances
  - Uses grabAccountData(data) in grab_account_data.py
    - Must supply coin ID that is grabbed from the script 'coinid.py'
 
+NEED TO DO: Finish HL script
