@@ -29,7 +29,7 @@ def BuyBot(order_size):
         
         now_time = time.asctime(time.localtime(time.time()))
         print(now_time)
-        spot = float('{:.4f}'.format(float(sp['data']['amount']) * 1.01))
+        spot = float('{:.4f}'.format(float(sp['data']['amount']) * 1.001))
         order_size_usd_buy = float('{:.4f}'.format(float(spot * order_size)))
         print("Attempting to buy ", order_size, " ALGO at: $", spot )
 
@@ -45,8 +45,6 @@ def BuyBot(order_size):
 
         BuyMenu()
 
-        #Log_Buy()   
-        #print("inside to_order.buy")
         return
 
     except KeyboardInterrupt:
@@ -69,7 +67,7 @@ def SellBot(order_size):
         status.close() 
 
 
-        sell_price = float('{:.4f}'.format(float(sp['data']['amount']) * .99))
+        sell_price = float('{:.4f}'.format(float(sp['data']['amount']) * .999))
         order_size_usd_sell = float('{:.4f}'.format(float(order_size * sell_price)))
         print("Attempting to sell at: $", sell_price)
 
@@ -84,8 +82,6 @@ def SellBot(order_size):
 
         SellMenu()
         
-        #Log_Sell()
-        #print("inside to_order.sell")
         return
 
     except KeyboardInterrupt:

@@ -33,7 +33,25 @@ the './cblogs/' folder and in the './logs/' folder.
 
 TODO:
 Add all coins available on Coinbase Pro
-Change the initial buy in to Grid(). Shouldn't buy if the market is already up.
+x--Change the initial buy in to Grid().--x
+Shouldn't buy if the market is already up.
 Change any GET requests to the WebSocket Feed that Coinbase Pro has avaiable. Will help with any throttling issues. 
  - Try threading to accomplish this. 
  - Should be able to change any check for the spot price to his and possibly account checks.
+
+8/18/2022:
+Switched trading to it's own function HL() in hl.py
+Added script 'coinid.py' that grabs all crypto and fiat IDs to check accounts with
+ - Dumps to a json file as such
+	{ crypto1:id1,
+	  crypto2:id2
+	}
+
+Changed how prices are grabbed from coinbase pro
+ - Uses Price(crypto, fiat) in grab_price.py
+   - Must supply crypto type and fiat currently trading, returns spot price
+
+Changed how account data is grabbed to retrieve crypto and fiat balances
+ - Uses grabAccountData(data) in grab_account_data.py
+   - Must supply coin ID that is grabbed from the script 'coinid.py'
+

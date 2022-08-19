@@ -11,8 +11,6 @@ API_SPOT = APIs['api_spot']
 API_KEY = os.getenv('CB_API_KEY')
 API_SECRET = os.getenv('CB_API_SECRET')
 API_PASS = os.getenv('CB_API_PASS')
-ALG = "829019b7-4630-460c-bcdb-d272bc7e7dc1"
-USD = "2ed00cea-6975-4296-8501-34ee89b3a4d6"
 auth = CoinbaseExchangeAuth(API_KEY, API_SECRET, API_PASS)
 
 
@@ -37,7 +35,7 @@ def Grid():
             old_difference = difference # Use old to compare to new
 
             if new_balance > init_investment:     
-                print("Crypto is up by %",difference) #When conditions are met, sell all crypto in wallet or buy all crypto that I can
+                print("Crypto is up by %",difference) #When conditions are met, sell all crypto that I can
                 if difference > 1:
                     flipper = True
                 else:
@@ -49,7 +47,7 @@ def Grid():
                     spot = float('{:.4f}'.format(float(sp['data']['amount'])))
                     new_balance = float('{:.4f}'.format(float(_status['crypto_available'] * spot)))
                     diff = float('{:.4f}'.format(((new_balance - init_investment) * 100) / float(init_investment)))
-                    order_size = float('{:.1f}'.format((new_balance - init_investment)/spot))
+                    order_size = float('{:.1f}'.format(new_balance/spot))
 
                     percentage_gap = float('{:.4f}'.format(diff - old_difference))
                     print("Gap of %",percentage_gap,"between",old_difference,"and",diff)
@@ -70,10 +68,11 @@ def Grid():
                         print("Upping the floor for higher profit margins!")
                         old_difference = diff
                         pass
-                    #if price drops .2% after being above 1%, sell off the right amount of crypto to bring balance to init_investment
                     TimeKeeper(abs(diff))
+                    break
+
             elif new_balance < init_investment:
-                print("Crypto is down by $",difference) #When conditions are met, buy crypto to keep balance in wallet(Holding $48 worth of algo all times)
+                print("Crypto is down by $",difference) #When conditions are met, buy all crypto that I can
                 if abs(difference) > .8:
                     flipper = True
                 else:
@@ -84,7 +83,7 @@ def Grid():
                     spot = float('{:.4f}'.format(float(sp['data']['amount'])))
                     new_balance = float('{:.4f}'.format(float(_status['crypto_available'] * spot)))
                     diff = float('{:.4f}'.format(((new_balance - init_investment) * 100) / float(init_investment)))
-                    order_size = abs(float('{:.1f}'.format((new_balance - init_investment)/spot)))
+                    order_size = abs(float('{:.1f}'.format(new_balance/spot)))
                     
                     percentage_gap = float('{:.4f}'.format(diff - old_difference))
                     print("Gap of %",percentage_gap,"between",old_difference,"and",diff)
@@ -92,13 +91,13 @@ def Grid():
                         print("Crypto has rose .2% while below the",old_difference,"mark.")
                         profit_gap = init_investment - new_balance
                         print("Profit Gap:",profit_gap)
-                        print("Going to buy at market price for %",diff,"to bring balance back to init_investment.")
+                        print("Going to buy at market price for %",diff,".")
                         print("Going to buy",order_size,"ALGO!")
                         BuyBot(order_size)
                         flipper = False
                         Rebase()
                         break
-                    if percentage_gap <= -.15:
+                    if percentage_gap <= -.13:
                         print("Crypto has dropped below the",old_difference,"mark by .15%!")
                         print("Lowering the floor for a larger rebuy!")
                         old_difference = diff
@@ -111,13 +110,14 @@ def Grid():
                 
             TimeKeeper(abs(difference))
 
-
         except KeyboardInterrupt:
             break
         except HTTPError as http_err:
             print(f'HTTP error occurred: {http_err}')
         except Exception as err:
-            print(f'Other error occurred: {err}') 
+            print(f'Other error occurred: {err}')
+
+
 
 def Rebase():
     status = open("status.json", "r")        
@@ -130,8 +130,8 @@ def Rebase():
     print("And usage of all the crypto/USD currently in use.")
     if _status['side'] == 'sell':
         _status['init_price'] = spot
-        #_status['init_investment'] = 0.0
-        #_status['crypto_available'] = 0.0
+        _status['init_investment'] = 0.0
+        _status['crypto_available'] = 0.0
         _status['buy_order_id'] = ""
         _status['sell_order_id'] = ""
         _status['side'] = ""
@@ -140,7 +140,7 @@ def Rebase():
         _status['order_size'] = 0.0
     elif _status['side'] == 'buy':
         _status['init_price'] = spot
-        #_status['init_investment'] = 0.0
+        _status['init_investment'] = 0.0
         _status['buy_order_id'] = ""
         _status['sell_order_id'] = ""
         _status['side'] = ""
@@ -152,7 +152,7 @@ def Rebase():
     status.write(json.dumps(_status))
     status.close()
 
-    Grid()
+    return
 
 
 def TimeKeeper(difference):

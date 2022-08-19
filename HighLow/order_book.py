@@ -16,7 +16,7 @@ USD = "2ed00cea-6975-4296-8501-34ee89b3a4d6"
 auth = CoinbaseExchangeAuth(API_KEY, API_SECRET, API_PASS)
 
 #ALL TRANSACTION DATA IS STORED IN 2 AREAS.
-#1. IN ITS OWN FILE IN ./logs/cblog/{transaction_id}/ <------Redundancy
+#1. IN ITS OWN FILE IN ./logs/cblog/{transaction_id}.json/ <------Redundancy
 #2. IN A GROUPED FILE IN ./logs/logs.json <------This allows easier parsing
 
 def BuyMenu():
