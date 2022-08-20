@@ -69,7 +69,7 @@ def Grid():
                         old_difference = diff
                         pass
                     TimeKeeper(abs(diff))
-                    break
+                    pass
 
             elif new_balance < init_investment:
                 print("Crypto is down by $",difference) #When conditions are met, buy all crypto that I can
@@ -98,7 +98,7 @@ def Grid():
                         Rebase()
                         break
                     if percentage_gap <= -.13:
-                        print("Crypto has dropped below the",old_difference,"mark by .15%!")
+                        print("Crypto has dropped below the",old_difference,"mark by .13%!")
                         print("Lowering the floor for a larger rebuy!")
                         old_difference = diff
                         pass

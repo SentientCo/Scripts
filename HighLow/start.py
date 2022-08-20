@@ -2,7 +2,7 @@ import time, os, requests, json
 
 from urllib.request import HTTPError
 from cbauth import CoinbaseExchangeAuth
-#from hl import HL
+from hl import HL
 from grab_price import Price
 from grab_account_data import grabAccountData
 
@@ -30,17 +30,8 @@ def Start():
         status = open("status.json", "r")        
         _status = json.load(status)            
         status.close()
-
-        #r = requests.get(API_URL + 'accounts/' + USD, auth=auth) #Grabs USD accounts
-        #p = r.json()
-
-        #for x in p:
-            #if x['currency'] == "ALGO": #Used to find the coin ID for account
-                #print(x)
-
         
         balance, hold, available = grabAccountData(USD)
-        
         crypto_balance, crypto_hold, crypto_available = grabAccountData(ALG)
         spot = Price(crypto, fiat)
 
@@ -61,20 +52,22 @@ def Start():
         if _status['init_investment'] == 0:
             print("Attempting to set init_investment to ", available)
             _status['init_investment'] = available
+        if _status['crypto_available'] == 0:
+            print("Attempting to set crypto_available to ", crypto_available)
+            _status['crypto_available'] = crypto_available
             
 
         status = open("status.json", "w+")
         status.write(json.dumps(_status))
-        if _status['init_price'] != 0:
+        status.close()
+        if _status['init_price'] or _status['init_investment'] or _status['crypto_available'] != 0:
             print("init_price has been set!")
-            if _status['init_investment'] != 0:
-                print("init_investment has been set!")
+            print("init_investment has been set!")
+            print("crypto_available has been set!")
         else:
             print("ERROR: Failed to set init variables!")
-        status.close()
- 
 
-        #HL() #Always start with Start() to perform first time setup, then should kick into Grid() without problem even if not first time setup
+        HL() #Always start with Start() to perform first time setup, then should kick into Grid() without problem even if not first time setup
         
 
     except KeyboardInterrupt:

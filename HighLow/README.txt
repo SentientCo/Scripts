@@ -20,9 +20,11 @@ URL for a coins price info: "https://api.coinbase.com/v2/"
 To start this program use powershell or cmd.
 1. Open up command prompt or powershell
 2. Change directory to "C:/YourFilePath/HighLow/" (cd C:/YourFilePath/HighLow)
-3. Start program with the python3 command. (python3 start.py)
-4. ???
-5. profit hopefully.
+3. Collect coin ID pairs with 'python3 coinid.py'
+-. Steps added here once user input is implemented.
+4. Start program with the python3 command. (python3 start.py)
+5. ???
+6. profit hopefully.
 KEEP IN MIND THIS BOT WILL DRAIN THE USD IN YOUR COINBASE PRO PORTFOLIO TO USE FOR TRADING!
 IF THERE ARE FUNDS YOU WANT TO NOT TRADE WITH, MOVE TO A DIFFERENT PORTFOLIO OR TO COINBASE.
 IF THIS HAPPENS AND YOU DON'T WANT IT TO THEN IMMEDIATELY SELL THE BOUGHT CRYPTO.
@@ -55,4 +57,3 @@ Changed how account data is grabbed to retrieve crypto and fiat balances
  - Uses grabAccountData(data) in grab_account_data.py
    - Must supply coin ID that is grabbed from the script 'coinid.py'
 
-NEED TO DO: Finish HL script

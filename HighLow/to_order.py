@@ -2,6 +2,7 @@ import json, requests, time, os
 from order_book import SellMenu, BuyMenu
 from urllib.request import HTTPError
 from cbauth import CoinbaseExchangeAuth
+from grab_price import Price
 #from logger import Log_Buy, Log_Sell
 
 with open('config.json') as config_file:
@@ -15,6 +16,8 @@ API_PASS = os.getenv('CB_API_PASS')
 ALG = "829019b7-4630-460c-bcdb-d272bc7e7dc1"
 USD = "2ed00cea-6975-4296-8501-34ee89b3a4d6"
 auth = CoinbaseExchangeAuth(API_KEY, API_SECRET, API_PASS)
+crypto = "ALGO"
+fiat = "USD"
 
 def BuyBot(order_size):
     try:       
@@ -22,15 +25,10 @@ def BuyBot(order_size):
         _status = json.load(status)            
         status.close()
 
-        r = requests.get(API_URL + 'accounts/' + USD, auth=auth)
-        p = r.json()
-        s = requests.get(API_SPOT + "prices/ALGO-USD/spot")
-        sp = s.json()
-        
         now_time = time.asctime(time.localtime(time.time()))
         print(now_time)
-        spot = float('{:.4f}'.format(float(sp['data']['amount']) * 1.001))
-        order_size_usd_buy = float('{:.4f}'.format(float(spot * order_size)))
+
+        spot = float('{:.4f}'.format(Price(crypto, fiat) * 1.001))
         print("Attempting to buy ", order_size, " ALGO at: $", spot )
 
         _status['crypto_available'] = order_size + _status['crypto_available']
@@ -38,7 +36,6 @@ def BuyBot(order_size):
         _status['order_size'] = order_size
         _status['side'] = "buy"
         
-
         status = open("status.json", "w+")
         status.write(json.dumps(_status))
         status.close()
@@ -59,16 +56,11 @@ def SellBot(order_size):
         now_time = time.asctime(time.localtime(time.time()))
         print(now_time) 
 
-        s = requests.get(API_SPOT + "prices/ALGO-USD/spot")
-        sp = s.json()
-
         status = open("status.json", "r")
         _status = json.load(status)
         status.close() 
 
-
-        sell_price = float('{:.4f}'.format(float(sp['data']['amount']) * .999))
-        order_size_usd_sell = float('{:.4f}'.format(float(order_size * sell_price)))
+        sell_price = float('{:.4f}'.format(Price(crypto, fiat) * .999))
         print("Attempting to sell at: $", sell_price)
 
         _status['crypto_available'] = _status['crypto_available'] - order_size

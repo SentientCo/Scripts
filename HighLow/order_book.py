@@ -14,6 +14,9 @@ API_PASS = os.getenv('CB_API_PASS')
 ALG = "829019b7-4630-460c-bcdb-d272bc7e7dc1"
 USD = "2ed00cea-6975-4296-8501-34ee89b3a4d6"
 auth = CoinbaseExchangeAuth(API_KEY, API_SECRET, API_PASS)
+crypto = "ALGO"
+fiat = "USD"
+productId = crypto + "-" + fiat
 
 #ALL TRANSACTION DATA IS STORED IN 2 AREAS.
 #1. IN ITS OWN FILE IN ./logs/cblog/{transaction_id}.json/ <------Redundancy
@@ -29,7 +32,7 @@ def BuyMenu():
             'size': _status['order_size'],
             'price': _status['buy_price'],
             'side': 'buy',
-            'product_id': 'ALGO-USD',
+            'product_id': productId,
         }
         r = requests.post(API_URL + 'orders', json=order, auth=auth)
         p = r.json()
@@ -65,7 +68,7 @@ def SellMenu():
             'size': _status['order_size'],
             'price': _status['sell_price'],
             'side': 'sell',
-            'product_id': 'ALGO-USD',
+            'product_id': productId,
         }
         r = requests.post(API_URL + 'orders', json=order, auth=auth)
         p = r.json()
