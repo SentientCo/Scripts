@@ -41,6 +41,7 @@ def BuyMenu():
         new_file = open(filename, "w")
         new_file.write(json.dumps(p))
         new_file.close()
+        #_status['side'] = "buy"
         _status['buy_order_id'] = p['id']
         status = open("status.json", "w+")
         status.write(json.dumps(_status))
@@ -78,6 +79,7 @@ def SellMenu():
         new_file.write(json.dumps(p))
         new_file.close
         #_status['profit'] = float('{:.2f}'.format((_status['sell_price'] * _status['order_size']) - (_status['buy_price'] * _status['order_size'])))
+        #_status['side'] = "sell"
         _status['sell_order_id'] = p['id']
         status = open("status.json", "w+")
         status.write(json.dumps(_status))

@@ -80,5 +80,5 @@ def Start():
 
 
 if __name__ == "__main__":
-    print("Starting up Grid Bot!")
+    print("Starting up High/Low Bot!")
     Start()

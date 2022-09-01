@@ -23,13 +23,14 @@ sell_place = .075 #Adjust this as needed 2
 buy_gap = .2 #Adjust this as needed 3
 buy_place = -.13 #Adjust this as needed 4
 
+status = open('status.json', "r")
+_status = json.load(status)
+status.close()
+
+init_price = _status['init_price']
+init_investment = _status['init_investment']
 
 def HL():
-    status = open('status.json', "r")
-    _status = json.load(status)
-    status.close()
-    init_price = _status['init_price']
-    init_investment = _status['init_investment']
     while True:
         try:
             #First needs to check if market is good to buy
@@ -37,16 +38,16 @@ def HL():
             print("")
             print("Checking against", init_price)
             spot = Price(crypto, fiat)
-            print("Current spot price", spot)
+            #print("Current spot price", spot)
 
             #Compares old price to new price and outputs a percentage difference
             diff = float('{:.4f}'.format(((spot - init_price) * 100) / init_price))
             old_diff = diff
 
-            if _status['crypto_available'] <= 1: # Shouldnt look to sell if you dont have crypto to sell
-                if spot > init_price:
-                    print(crypto + " is up by %", diff)
-                    if difference > 1:
+            if spot > init_price: 
+                print(crypto + " is up by %", diff)
+                if _status['crypto_available'] >= 1: # Shouldnt look to sell if you dont have crypto to sell
+                    if diff > 1:
                         flipper = True
                     else:
                         flipper = False
@@ -64,23 +65,22 @@ def HL():
                             print("Crypto has dropped .223% while above the",old_diff,"mark.")
                             print("Going to sell at market price for %",diff,"profit(with .6% fee currently)")
                             print("Going to buy",order_size, "" + crypto + "!\n")
-                            SellBot(order_size)
+                            #SellBot(order_size)
                             Rebase()
                             flipper = False 
                             break
-                        if percentage_gap >= .075:
+                        elif percentage_gap >= sell_place: #Adjust this as needed 2
                             print("Crypto has rose above the",old_diff,"mark by .075%!")
                             print("Upping the floor for higher profit margins!\n")
                             old_diff = diff
                             pass
                         TimeKeeper(abs(diff))
                         pass
-
-
-
+                elif _status['crypto_available'] <= 1:
+                    print("No crypto available to sell!")
             elif spot < init_price:
-                print("Crypto is down by $", difference)
-                if abs(difference) > .8:
+                print("Crypto is down by $", diff)
+                if abs(diff) > .8:
                     flipper = True
                 else:
                     flipper = False
@@ -97,11 +97,11 @@ def HL():
                         print(crypto + " has rose .2% while below the",old_diff,"mark.")
                         print("Going to buy at market price for %",diff,".")
                         print("Going to buy",order_size,"" + crypto + "!\n")
-                        BuyBot(order_size)
+                        #BuyBot(order_size)
                         Rebase()
                         flipper = False
                         break
-                    if perc_gap <= buy_place: #Adjust this as needed 4
+                    elif perc_gap <= buy_place: #Adjust this as needed 4
                         print("Crypto has dropped below the",old_diff,"mark by .13%!")
                         print("Lowering the floor for a larger buy!\n")
                         old_diff = diff
@@ -111,6 +111,7 @@ def HL():
                     pass
             else:
                 print("Crypto is staying even!") #Add reporting to this later on
+                print(diff)
 
             TimeKeeper(abs(diff))
         
@@ -131,26 +132,19 @@ def Rebase():
     crypto_balance, crypto_hold, crypto_available = grabAccountData(ALG)
     print("Going to rebase at current market price to prevent trading on a decline")
     print("And usage of all the crypto/USD currently in use.")
-    if _status['side'] == 'sell':
-        _status['init_price'] = spot
-        _status['init_investment'] = available
-        _status['crypto_available'] = crypto_available
-        _status['buy_order_id'] = ""
-        _status['sell_order_id'] = ""
-        _status['side'] = ""
-        _status['buy_price'] = 0.0
-        #_status['sell_price'] = 0.0
-        _status['order_size'] = 0.0
-    elif _status['side'] == 'buy':
-        _status['init_price'] = spot
-        _status['init_investment'] = available
-        _status['crypto_available'] = crypto_available
-        _status['buy_order_id'] = ""
-        _status['sell_order_id'] = ""
-        _status['side'] = ""
-        #_status['buy_price'] = 0.0
-        _status['sell_price'] = 0.0
-        _status['order_size'] = 0.0
+
+    _status['init_price'] = spot
+    _status['init_investment'] = available
+    _status['crypto_available'] = crypto_available
+    _status['buy_order_id'] = ""
+    _status['sell_order_id'] = ""
+    _status['side'] = ""
+    _status['buy_price'] = 0.0
+    _status['sell_price'] = 0.0
+    _status['order_size'] = 0.0
+    
+    init_price = spot
+    init_investment = available
 
     status = open("status.json", "w+")
     status.write(json.dumps(_status))
