@@ -1,0 +1,20 @@
+{
+    "init_price": 0,
+    "init_investment": 0,
+    "lower_limit": 0,
+    "max_bank": 0,
+    "init_bank": 0,
+    "crypto_available": 0.0,
+    "buy_order_id": "",
+    "sell_order_id": "",
+    "side": "buy",
+    "buy_price": 0,
+    "sell_price": 0.0,
+    "order_size": 0.0,
+    "order_size_usd_buy": 0,
+    "order_size_usd_sell": 0.0,
+    "time_started": "",
+    "time_completed": "",
+    "margin": 0,
+    "profit": 0
+}

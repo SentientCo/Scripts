@@ -1,0 +1,8 @@
+{
+    "buy_order_id": {
+        "buy_price": 0,
+        "order_size": 0,
+        "order_size_usd": 0,
+        "time_started": "Time Executed"
+    }
+}
