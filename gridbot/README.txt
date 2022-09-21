@@ -34,3 +34,9 @@ the './cblogs/' folder and in the './logs/' folder.
 
 9/7/2022: Overhaul of the code for security and ease of use. Used the scripts made when 
 	  writing the High/Low Trading Bot.
+	  
+	  
+Please feel free to donate it will be appreciated! Thank you in advance!
+ALGO: 2WTX3VOXMPEA2TXVD7NN4PQHSJZY7AJS66BQA5WTMW5LX2B6SWYNSPXABM
+ETH: 0xB893D5c9EbF9478539632442700E334316C0F9b3
+BTC: 3NCpNd1TgbD7jYFfUThywuqaMANgsBcS8F
