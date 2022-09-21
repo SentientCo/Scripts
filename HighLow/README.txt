@@ -59,3 +59,8 @@ Changed how account data is grabbed to retrieve crypto and fiat balances
 
 9/1/2022: Various bug fixes
 
+Please feel free to donate it will be appreciated! Thank you in advance!
+ALGO: 2WTX3VOXMPEA2TXVD7NN4PQHSJZY7AJS66BQA5WTMW5LX2B6SWYNSPXABM
+ETH: 0xB893D5c9EbF9478539632442700E334316C0F9b3
+BTC: 3NCpNd1TgbD7jYFfUThywuqaMANgsBcS8F
+
